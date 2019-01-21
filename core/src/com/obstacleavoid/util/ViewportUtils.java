@@ -39,7 +39,7 @@ public class ViewportUtils {
 
         renderer.setProjectionMatrix(viewport.getCamera().combined);
         renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.setColor(Color.WHITE);
+        renderer.setColor(Color.DARK_GRAY);
 
         // draw grid lines
         for(int x = -doubleWorldWidth; x < doubleWorldWidth; x += cellSize) {
