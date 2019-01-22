@@ -7,10 +7,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.obstacleavoid.config.GameConfig;
+import com.obstacleavoid.entity.Obstacle;
 import com.obstacleavoid.entity.Player;
 import com.obstacleavoid.util.GdxUtils;
 import com.obstacleavoid.util.ViewportUtils;
@@ -23,6 +26,8 @@ public class GameScreen implements Screen {
     private Viewport viewport;
     private ShapeRenderer renderer;
     private Player player;
+    private Array<Obstacle> obstacles = new Array<Obstacle>();
+    private float obstacleTimer;
     private DebugCameraController debugCameraController;
 
     @Override
@@ -33,6 +38,7 @@ public class GameScreen implements Screen {
 
         // create player
         player = new Player();
+
 
         // starting position
         float startPlayerX = GameConfig.WORLD_WIDTH / 2;
@@ -62,10 +68,46 @@ public class GameScreen implements Screen {
 
     private void update(float delta) {
         updatePlayer();
+        updateObstacles(delta);
+    }
+
+    private void blockPlayerFromLeavingTheWorld() {
+        float playerX = MathUtils.clamp(
+                     player.getX(),
+                player.getWidth() / 2,
+                GameConfig.WORLD_WIDTH - player.getWidth() / 2);
+
+        player.setPosition(playerX, player.getY());
+    }
+
+    private void updateObstacles(float delta) {
+        for(Obstacle obstacle : obstacles) {
+            obstacle.update();
+        }
+
+        createNewObstacle(delta);
+    }
+
+    private void createNewObstacle(float delta) {
+        obstacleTimer += delta;
+
+        if(obstacleTimer >= GameConfig.OBSTACLE_SPAWN_TIME) {
+            float min = 0f;
+            float max = GameConfig.WORLD_WIDTH;
+            float obstacleX = MathUtils.random(min, max);
+            float obstacleY = GameConfig.WORLD_HEIGHT;
+
+            Obstacle obstacle = new Obstacle();
+            obstacle.setPosition(obstacleX, obstacleY);
+            obstacles.add(obstacle);
+            obstacleTimer = 0f;
+        }
+
     }
 
     private void updatePlayer() {
         player.update();
+        blockPlayerFromLeavingTheWorld();
     }
 
     private void renderDebug() {
@@ -82,6 +124,9 @@ public class GameScreen implements Screen {
 
     private void drawDebug() {
         player.drawDebug(renderer);
+        for (Obstacle obstacle : obstacles) {
+            obstacle.drawDebug(renderer);
+        }
     }
 
     @Override
