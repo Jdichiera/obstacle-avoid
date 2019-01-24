@@ -4,7 +4,6 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.obstacleavoid.screen.GameScreen;
-import com.obstacleavoid.tossout.ShapeRendererSample;
 
 
 // Extend game to allow for multiple screens

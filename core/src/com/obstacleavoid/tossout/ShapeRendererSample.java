@@ -21,10 +21,10 @@ public class ShapeRendererSample implements Screen, InputProcessor {
     private Viewport viewport;
     private ShapeRenderer renderer;
 
-    private Boolean drawGrid = true;
-    private Boolean drawCircles = true;
-    private Boolean drawRectangles = true;
-    private Boolean drawPoints = true;
+    private boolean drawGrid = true;
+    private boolean drawCircles = true;
+    private boolean drawRectangles = true;
+    private boolean drawPoints = true;
 
 
     @Override

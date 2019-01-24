@@ -142,35 +142,35 @@ public class DebugCameraConfig {
         return zoomSpeed;
     }
 
-    public Boolean isLeftPressed() {
+    public boolean isLeftPressed() {
         return Gdx.input.isKeyPressed(leftKey);
     }
 
-    public Boolean isRightPressed() {
+    public boolean isRightPressed() {
         return Gdx.input.isKeyPressed(rightKey);
     }
 
-    public Boolean isUpPressed() {
+    public boolean isUpPressed() {
         return Gdx.input.isKeyPressed(upKey);
     }
 
-    public Boolean isDownPressed() {
+    public boolean isDownPressed() {
         return Gdx.input.isKeyPressed(downKey);
     }
 
-    public Boolean isZoomInPressed() {
+    public boolean isZoomInPressed() {
         return Gdx.input.isKeyPressed(zoomInKey);
     }
 
-    public Boolean isZoomOutPressed() {
+    public boolean isZoomOutPressed() {
         return Gdx.input.isKeyPressed(zoomOutKey);
     }
 
-    public Boolean isResetPressed() {
+    public boolean isResetPressed() {
         return Gdx.input.isKeyPressed(resetKey);
     }
 
-    public Boolean isLogPressed() {
+    public boolean isLogPressed() {
         return Gdx.input.isKeyPressed(logKey);
     }
 
