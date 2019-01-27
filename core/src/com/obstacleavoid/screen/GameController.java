@@ -3,6 +3,8 @@ package com.obstacleavoid.screen;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
+import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Pools;
 import com.obstacleavoid.config.DifficultyLevel;
 import com.obstacleavoid.config.GameConfig;
 import com.obstacleavoid.entity.Obstacle;
@@ -23,6 +25,7 @@ public class GameController {
     private int displayScore; // Score that is displayed on HUD
     private int lives = GameConfig.LIVES_START;
     private DifficultyLevel difficultyLevel = DifficultyLevel.EASY;
+    private Pool<Obstacle> obstaclePool;
 
     // == Constructor ==
     public GameController() {
@@ -41,6 +44,9 @@ public class GameController {
 
         // position player
         player.setPosition(startPlayerX, startPlayerY);
+
+        // Init pool
+        obstaclePool = Pools.get(Obstacle.class, 40);
     }
 
     // == Public Methods ==
@@ -113,6 +119,7 @@ public class GameController {
 
             if(first.getY() < minObstacleY) {
                 obstacles.removeValue(first, true);
+                obstaclePool.free(first);
             }
         }
     }
@@ -121,12 +128,12 @@ public class GameController {
         obstacleTimer += delta;
 
         if(obstacleTimer >= GameConfig.OBSTACLE_SPAWN_TIME) {
-            float min = 0f;
-            float max = GameConfig.WORLD_WIDTH;
+            float min = Obstacle.SIZE / 2f;
+            float max = GameConfig.WORLD_WIDTH - Obstacle.SIZE / 2;
             float obstacleX = MathUtils.random(min, max);
             float obstacleY = GameConfig.WORLD_HEIGHT;
 
-            Obstacle obstacle = new Obstacle();
+            Obstacle obstacle = obstaclePool.obtain();
             obstacle.setYSpeed(difficultyLevel.getObstacleSpeed());
             obstacle.setPosition(obstacleX, obstacleY);
             obstacles.add(obstacle);

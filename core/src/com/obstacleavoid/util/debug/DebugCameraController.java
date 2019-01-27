@@ -59,7 +59,7 @@ public class DebugCameraController {
         if(config.isZoomInPressed()) {
             zoomIn(zoomSpeed);
         } else if(config.isZoomOutPressed()) {
-            zoomIn(-zoomSpeed);
+            zoomOut(zoomSpeed);
         }
 
         // Reset controls

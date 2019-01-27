@@ -14,6 +14,7 @@ public abstract class GameObjectBase {
     }
 
     public void drawDebug(ShapeRenderer renderer) {
+        renderer.x(bounds.x, bounds.y, 0.1f);
         renderer.circle(bounds.x, bounds.y, bounds.radius);
     }
 
