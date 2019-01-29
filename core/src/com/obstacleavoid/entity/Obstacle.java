@@ -1,32 +1,24 @@
 package com.obstacleavoid.entity;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.Pool;
 import com.obstacleavoid.config.GameConfig;
 
+// Implements poolable to override reset and reset object before it is put back into pool
 public class Obstacle extends GameObjectBase implements Pool.Poolable {
-
-    private static final float BOUNDS_RADIUS = 0.3f; // in world units
-    public static final float SIZE = 2 * BOUNDS_RADIUS;
 
     // Default to med speed
     private float ySpeed = GameConfig.MEDIUM_OBSTACLE_SPEED;
     private boolean hit;
 
     public Obstacle() {
-        super(BOUNDS_RADIUS);
+        super(GameConfig.OBSTACLE_BOUNDS_RADIUS);
+        setSize(GameConfig.OBSTACLE_SIZE, GameConfig.OBSTACLE_SIZE);
     }
 
     public void update() {
         setY(getY() - ySpeed);
-    }
-
-    public float getWidth() {
-        return SIZE;
     }
 
     public boolean isPlayerColliding(Player player) {
@@ -52,4 +44,5 @@ public class Obstacle extends GameObjectBase implements Pool.Poolable {
     public void reset() {
         hit = false;
     }
+
 }

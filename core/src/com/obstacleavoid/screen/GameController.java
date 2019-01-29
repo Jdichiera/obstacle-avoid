@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.obstacleavoid.config.DifficultyLevel;
 import com.obstacleavoid.config.GameConfig;
+import com.obstacleavoid.entity.Background;
 import com.obstacleavoid.entity.Obstacle;
 import com.obstacleavoid.entity.Player;
 import com.obstacleavoid.util.debug.DebugCameraController;
@@ -19,6 +20,7 @@ public class GameController {
     // == Attributes / fields ==
     private Player player;
     private Array<Obstacle> obstacles = new Array<Obstacle>();
+    private Background background;
     private float obstacleTimer;
     private float scoreTimer;
     private int score;
@@ -39,14 +41,20 @@ public class GameController {
 
 
         // starting position
-        float startPlayerX = GameConfig.WORLD_WIDTH / 2;
-        float startPlayerY = 1;
+        float halfPlayerSize = GameConfig.PLAYER_SIZE / 2;
+        float startPlayerX = GameConfig.WORLD_WIDTH / 2 - halfPlayerSize;
+        float startPlayerY = 1 - halfPlayerSize;
 
         // position player
         player.setPosition(startPlayerX, startPlayerY);
 
         // Init pool
         obstaclePool = Pools.get(Obstacle.class, 40);
+
+        // Init background
+        background = new Background();
+        background.setPosition(0, 0);
+        background.setSize(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
     }
 
     // == Public Methods ==
@@ -74,6 +82,10 @@ public class GameController {
         return obstacles;
     }
 
+    public Background getBackground() {
+        return background;
+    }
+
     public int getDisplayScore() {
         return displayScore;
     }
@@ -95,8 +107,8 @@ public class GameController {
     private void blockPlayerFromLeavingTheWorld() {
         float playerX = MathUtils.clamp(
                 player.getX(),
-                player.getWidth() / 2,
-                GameConfig.WORLD_WIDTH - player.getWidth() / 2);
+                0,
+                GameConfig.WORLD_WIDTH - player.getWidth());
 
         player.setPosition(playerX, player.getY());
     }
@@ -115,7 +127,7 @@ public class GameController {
         if(obstacles.size > 0) {
             Obstacle first = obstacles.first();
 
-            float minObstacleY = -Obstacle.SIZE;
+            float minObstacleY = -GameConfig.OBSTACLE_SIZE;
 
             if(first.getY() < minObstacleY) {
                 obstacles.removeValue(first, true);
@@ -128,8 +140,8 @@ public class GameController {
         obstacleTimer += delta;
 
         if(obstacleTimer >= GameConfig.OBSTACLE_SPAWN_TIME) {
-            float min = Obstacle.SIZE / 2f;
-            float max = GameConfig.WORLD_WIDTH - Obstacle.SIZE / 2;
+            float min = 0;
+            float max = GameConfig.WORLD_WIDTH - GameConfig.OBSTACLE_SIZE;
             float obstacleX = MathUtils.random(min, max);
             float obstacleY = GameConfig.WORLD_HEIGHT;
 

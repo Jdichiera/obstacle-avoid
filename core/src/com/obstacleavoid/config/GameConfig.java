@@ -18,7 +18,12 @@ public class GameConfig {
     public static final float SCORE_MAX_TIME = 1.25f;
     public static final int LIVES_START = 3;
 
+    public static final float OBSTACLE_BOUNDS_RADIUS = 0.3f; // in world units
+    public static final float OBSTACLE_SIZE = 2 * OBSTACLE_BOUNDS_RADIUS;
+
     public static final float MAX_PLAYER_X_SPEED = 0.25f;
+    public static final float PLAYER_BOUNDS_RADIUS = 0.4f; // in world units
+    public static final float PLAYER_SIZE = 2 * PLAYER_BOUNDS_RADIUS;
 
     public static final float EASY_OBSTACLE_SPEED = 0.1f;
     public static final float MEDIUM_OBSTACLE_SPEED = 0.15f;
