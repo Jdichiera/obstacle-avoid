@@ -21,9 +21,14 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         assetManager.load(AssetDescriptors.FONT);
-        assetManager.load(AssetDescriptors.BACKGROUND);
-        assetManager.load(AssetDescriptors.PLAYER);
-        assetManager.load(AssetDescriptors.OBSTACLE);
+
+        // Load the atlas texture into the asset manager
+        assetManager.load(AssetDescriptors.GAME_PLAY);
+
+        // Removing these because we are using the atlas texture
+//        assetManager.load(AssetDescriptors.BACKGROUND);
+//        assetManager.load(AssetDescriptors.PLAYER);
+//        assetManager.load(AssetDescriptors.OBSTACLE);
 
         assetManager.finishLoading();
 

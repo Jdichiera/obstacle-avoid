@@ -1,19 +1,15 @@
 package com.obstacleavoid.screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.obstacleavoid.assets.AssetDescriptors;
-import com.obstacleavoid.assets.AssetPaths;
+import com.obstacleavoid.assets.RegionNames;
 import com.obstacleavoid.config.GameConfig;
 import com.obstacleavoid.entity.Background;
 import com.obstacleavoid.entity.Obstacle;
@@ -37,9 +33,11 @@ public class GameRenderer implements Disposable {
     private DebugCameraController debugCameraController;
     private final GameController controller;
     private final AssetManager assetManager;
-    private Texture playerTexture;
-    private Texture obstacleTexture;
-    private Texture backgroundTexture;
+
+    // Use Texture Region because we are getting the texture from atlas
+    private TextureRegion playerRegion;
+    private TextureRegion obstacleRegion;
+    private TextureRegion backgroundRegion;
 
     // == Constructor ==
     public GameRenderer(AssetManager assetManager, GameController controller) {
@@ -62,13 +60,24 @@ public class GameRenderer implements Disposable {
         debugCameraController = new DebugCameraController();
         debugCameraController.setStartPosition(GameConfig.WORLD_CENTER_X, GameConfig.WORLD_CENTER_Y);
 
-        playerTexture = assetManager.get(AssetDescriptors.PLAYER);
-        obstacleTexture = assetManager.get(AssetDescriptors.OBSTACLE);
-        backgroundTexture = assetManager.get(AssetDescriptors.BACKGROUND);
+        // We are no longer using asset descriptors since we are using the atlas
+//        playerRegion = assetManager.get(AssetDescriptors.PLAYER);
+//        obstacleRegion = assetManager.get(AssetDescriptors.OBSTACLE);
+//        backgroundRegion = assetManager.get(AssetDescriptors.BACKGROUND);
+
+        // Get the atlas texture atlas from assetmanager and load the individual textures from it
+        TextureAtlas gamePlayAtlas = assetManager.get(AssetDescriptors.GAME_PLAY);
+
+        playerRegion = gamePlayAtlas.findRegion(RegionNames.PLAYER);
+        obstacleRegion = gamePlayAtlas.findRegion(RegionNames.OBSTACLE);
+        backgroundRegion = gamePlayAtlas.findRegion(RegionNames.BACKGROUND);
     }
 
     // == Public methods ==
     public void render(float delta) {
+        // Measure the number of texture swaps to GPU by setting to 0 and then printing out totalRenderCalls
+        batch.totalRenderCalls = 0;
+
         // Not wrapping inside alive because we want to be able to control camera at game over
         debugCameraController.handleDebugInput(delta);
         debugCameraController.applyTo(camera);
@@ -84,6 +93,8 @@ public class GameRenderer implements Disposable {
 
         // Render debug graphics
         renderDebug();
+
+        System.out.println("Total Render Calls : " + batch.totalRenderCalls);
     }
 
     public void resize(int width, int height) {
@@ -99,9 +110,9 @@ public class GameRenderer implements Disposable {
 
         // These are all disposed by assetManager
 //        font.dispose();
-//        playerTexture.dispose();
-//        obstacleTexture.dispose();
-//        backgroundTexture.dispose();
+//        playerRegion.dispose();
+//        obstacleRegion.dispose();
+//        backgroundRegion.dispose();
 
         assetManager.dispose();
     }
@@ -113,14 +124,14 @@ public class GameRenderer implements Disposable {
         batch.begin();
         // Draw background
         Background background = controller.getBackground();
-        batch.draw(backgroundTexture, background.getX(), background.getY(), background.getWidth(), background.getHeight());
+        batch.draw(backgroundRegion, background.getX(), background.getY(), background.getWidth(), background.getHeight());
         // Draw player
         Player player = controller.getPlayer();
-        batch.draw(playerTexture, player.getX(), player.getY(), player.getWidth(), player.getHeight());
+        batch.draw(playerRegion, player.getX(), player.getY(), player.getWidth(), player.getHeight());
 
         // Draw obstacles
         for (Obstacle obstacle : controller.getObstacles()) {
-            batch.draw(obstacleTexture, obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
+            batch.draw(obstacleRegion, obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
         }
         batch.end();
     }
