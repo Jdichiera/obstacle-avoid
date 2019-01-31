@@ -13,6 +13,11 @@ public class AssetPacker {
     public static void main(String[] args) {
         TexturePacker.Settings settings = new TexturePacker.Settings();
         settings.debug = DRAW_DEBUG_OUTLINE;
+
+        // Pack the gameplay assets
         TexturePacker.process(settings, RAW_ASSETS_PATH + "/gameplay", ASSETS_PATH + "/gameplay", "gameplay");
+
+        // Pack the UI assets
+        TexturePacker.process(settings, RAW_ASSETS_PATH + "/ui",  ASSETS_PATH + "/ui", "ui");
     }
 }

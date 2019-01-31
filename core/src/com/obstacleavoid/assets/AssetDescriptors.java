@@ -23,6 +23,10 @@ public class AssetDescriptors {
     public static final AssetDescriptor<TextureAtlas> GAME_PLAY =
             new AssetDescriptor<TextureAtlas>(AssetPaths.GAME_PLAY, TextureAtlas.class);
 
+    // Asset descriptor for UI
+    public static final AssetDescriptor<TextureAtlas> UI =
+            new AssetDescriptor<TextureAtlas>(AssetPaths.UI, TextureAtlas.class);
+
     private AssetDescriptors() {
     }
 }

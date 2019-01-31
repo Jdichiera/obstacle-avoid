@@ -9,8 +9,11 @@ public class AssetPaths {
 //    public static final String TEXTURE_PLAYER = "gameplay/player.png";
 //    public static final String TEXTURE_OBSTACLE = "gameplay/obstacle.png";
 
-    // use atlas
+    // Path to gameplay atlas
     public static final String GAME_PLAY = "gameplay/gameplay.atlas";
+
+    // Path to UI atlas
+    public static final String UI = "ui/ui.atlas";
 
     private AssetPaths() {}
 

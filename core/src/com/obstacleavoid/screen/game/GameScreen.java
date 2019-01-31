@@ -1,11 +1,14 @@
-package com.obstacleavoid.screen;
+package com.obstacleavoid.screen.game;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.utils.Logger;
 import com.obstacleavoid.ObstacleAvoidGame;
 import com.obstacleavoid.assets.AssetDescriptors;
 
 public class GameScreen implements Screen {
+
+    private static final Logger log = new Logger(GameScreen.class.getName(), Logger.DEBUG);
 
     private final ObstacleAvoidGame game;
     private final AssetManager assetManager;
@@ -20,20 +23,10 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        assetManager.load(AssetDescriptors.FONT);
-
-        // Load the atlas texture into the asset manager
-        assetManager.load(AssetDescriptors.GAME_PLAY);
-
-        // Removing these because we are using the atlas texture
-//        assetManager.load(AssetDescriptors.BACKGROUND);
-//        assetManager.load(AssetDescriptors.PLAYER);
-//        assetManager.load(AssetDescriptors.OBSTACLE);
-
-        assetManager.finishLoading();
-
+        log.debug("Show");
         controller = new GameController();
-        renderer = new GameRenderer(assetManager, controller);
+
+        renderer = new GameRenderer(game.getBatch(), assetManager, controller);
     }
 
     @Override
@@ -59,6 +52,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
+        log.debug("Hide");
         dispose();
     }
 
@@ -66,4 +60,6 @@ public class GameScreen implements Screen {
     public void dispose() {
         renderer.dispose();
     }
+
+
 }

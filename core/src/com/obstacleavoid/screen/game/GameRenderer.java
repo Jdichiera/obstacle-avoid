@@ -1,4 +1,4 @@
-package com.obstacleavoid.screen;
+package com.obstacleavoid.screen.game;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -27,12 +27,12 @@ public class GameRenderer implements Disposable {
     private OrthographicCamera hudCamera;
     private Viewport hudViewport;
 
-    private SpriteBatch batch;
     private BitmapFont font;
     private final GlyphLayout layout = new GlyphLayout();
     private DebugCameraController debugCameraController;
     private final GameController controller;
     private final AssetManager assetManager;
+    private final SpriteBatch batch;
 
     // Use Texture Region because we are getting the texture from atlas
     private TextureRegion playerRegion;
@@ -40,9 +40,10 @@ public class GameRenderer implements Disposable {
     private TextureRegion backgroundRegion;
 
     // == Constructor ==
-    public GameRenderer(AssetManager assetManager, GameController controller) {
+    public GameRenderer(SpriteBatch batch, AssetManager assetManager, GameController controller) {
         this.assetManager = assetManager;
         this.controller = controller;
+        this.batch = batch;
         init();
     }
 
@@ -53,7 +54,6 @@ public class GameRenderer implements Disposable {
 
         hudCamera = new OrthographicCamera();
         hudViewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT, hudCamera);
-        batch = new SpriteBatch();
         font = assetManager.get(AssetDescriptors.FONT);
 
         // Create debug camera controller
@@ -76,7 +76,7 @@ public class GameRenderer implements Disposable {
     // == Public methods ==
     public void render(float delta) {
         // Measure the number of texture swaps to GPU by setting to 0 and then printing out totalRenderCalls
-        batch.totalRenderCalls = 0;
+//        batch.totalRenderCalls = 0;
 
         // Not wrapping inside alive because we want to be able to control camera at game over
         debugCameraController.handleDebugInput(delta);
@@ -94,7 +94,7 @@ public class GameRenderer implements Disposable {
         // Render debug graphics
         renderDebug();
 
-        System.out.println("Total Render Calls : " + batch.totalRenderCalls);
+//        System.out.println("Total Render Calls : " + batch.totalRenderCalls);
     }
 
     public void resize(int width, int height) {
@@ -106,7 +106,9 @@ public class GameRenderer implements Disposable {
     @Override
     public void dispose() {
         renderer.dispose();
-        batch.dispose();
+
+        // Batch is disposed when we dispose the game
+//        batch.dispose();
 
         // These are all disposed by assetManager
 //        font.dispose();

@@ -1,4 +1,4 @@
-package com.obstacleavoid.screen;
+package com.obstacleavoid.screen.game;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
@@ -10,7 +10,6 @@ import com.obstacleavoid.config.GameConfig;
 import com.obstacleavoid.entity.Background;
 import com.obstacleavoid.entity.Obstacle;
 import com.obstacleavoid.entity.Player;
-import com.obstacleavoid.util.debug.DebugCameraController;
 
 public class GameController {
 
